@@ -141,9 +141,9 @@ grub_linux_boot (void)
   grub_ieee1275_set_property (grub_ieee1275_chosen, "bootargs", linux_args,
 			      grub_strlen (linux_args) + 1, &actual);
 
-  grub_dprintf ("loader", "Entry point: 0x%x\n", linux_entry);
-  grub_dprintf ("loader", "Initrd at: 0x%x, size 0x%x\n", initrd_addr,
-		initrd_size);
+  grub_dprintf ("loader", "Entry point: 0x%lx\n", (unsigned long)linux_entry);
+  grub_dprintf ("loader", "Initrd at: 0x%lx, size 0x%lx\n", 
+                    (unsigned long)initrd_addr, (unsigned long)initrd_size);
   grub_dprintf ("loader", "Boot arguments: %s\n", linux_args);
   grub_dprintf ("loader", "Jumping to Linux...\n");
 
@@ -360,7 +360,8 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
   if (addr == (grub_addr_t) -1)
      goto fail;
 
-  grub_dprintf ("loader", "Loading initrd at 0x%x, size 0x%x\n", addr, size);
+  grub_dprintf ("loader", "Loading initrd at 0x%lx, size 0x%lx\n", 
+		(unsigned long)addr, (unsigned long)size);
 
   if (grub_initrd_load (&initrd_ctx, argv, (void *) addr))
     goto fail;
