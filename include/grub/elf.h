@@ -1998,6 +1998,9 @@ typedef Elf32_Addr Elf32_Conflict;
 #define GRUB_ELF_R_PPC_DIAB_RELSDA_HI	184	/* like EMB_RELSDA, but high 16 bit */
 #define GRUB_ELF_R_PPC_DIAB_RELSDA_HA	185	/* like EMB_RELSDA, adjusted high 16 */
 
+#define GRUB_ELF_R_PPC64_REL16_LO       250
+#define GRUB_ELF_R_PPC64_REL16_HA       252
+
 /* This is a phony reloc to handle any old fashioned TOC16 references
    that may still be in object files.  */
 #define GRUB_ELF_R_PPC_TOC16		255
