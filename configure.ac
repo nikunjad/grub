@@ -73,7 +73,12 @@ grub_TRANSFORM([grub-file])
 
 # Optimization flag.  Allow user to override.
 if test "x$TARGET_CFLAGS" = x; then
-  TARGET_CFLAGS="$TARGET_CFLAGS -Os"
+  if test "x$target_cpu" = xpowerpc64le; then
+     #HACK till savegpr/addgpr is supported
+     TARGET_CFLAGS="$TARGET_CFLAGS -O1"
+  else
+     TARGET_CFLAGS="$TARGET_CFLAGS -Os"
+  fi
 fi
 
 # Default HOST_CPPFLAGS
