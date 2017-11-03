@@ -61,6 +61,7 @@ struct trampoline
   grub_uint32_t std;
   grub_uint32_t addis;
   grub_uint32_t addi;
+  grub_uint32_t clrldi;
   grub_uint32_t mtctr;
   grub_uint32_t bctr;
 };
@@ -70,6 +71,7 @@ static const struct trampoline trampoline_template =
        0xf8410018,       /* std     r2,24(r1) */
        0x3d800000,       /* addis   r12,0,0 */
        0x398c0000,       /* addi    r12,r12,0 */
+       0x798c0020,       /* clrldi  r12,r12,32 */
        0x7d8903a6,       /* mtctr   r12 */
        0x4e800420,       /* bctr */
   };
