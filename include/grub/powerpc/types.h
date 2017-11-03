@@ -19,7 +19,7 @@
 #ifndef GRUB_TYPES_CPU_HEADER
 #define GRUB_TYPES_CPU_HEADER	1
 
-#ifdef __powerpc64le__
+#ifdef __powerpc64__
 /* The size of void *.  */
 #define GRUB_TARGET_SIZEOF_VOID_P	8
 
@@ -33,8 +33,12 @@
 #define GRUB_TARGET_SIZEOF_LONG		4
 #endif
 
-/* powerpc is big-endian.  */
-#define GRUB_TARGET_WORDS_BIGENDIAN	1
+#ifdef __powerpc64le__
+#undef GRUB_TARGET_WORDS_BIGENDIAN
+#else
+#define GRUB_TARGET_WORDS_BIGENDIAN     1
+#endif
+
 
 
 #endif /* ! GRUB_TYPES_CPU_HEADER */
