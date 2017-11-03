@@ -191,6 +191,31 @@ grub_dl_get_section_addr (grub_dl_t mod, unsigned n)
   return 0;
 }
 
+void *grub_dl_find_section_addr (grub_dl_t mod, Elf_Ehdr *e, const char *name)
+{
+  Elf_Shdr *s;
+  const char *str;
+  unsigned i;
+  grub_dl_segment_t seg;
+
+  s = (Elf_Shdr *) ((char *) e + e->e_shoff + e->e_shstrndx * e->e_shentsize);
+  str = (char *) e + s->sh_offset;
+
+  for (i = 0, s = (Elf_Shdr *) ((char *) e + e->e_shoff);
+       i < e->e_shnum;
+       i++, s = (Elf_Shdr *) ((char *) s + e->e_shentsize))
+    {
+      if (grub_strcmp (str + s->sh_name, name) == 0)
+	{
+	  for (seg = mod->segment; seg; seg = seg->next)
+	    if (seg->section == i)
+	      return seg->addr;
+	}
+    }
+
+  return 0;
+}
+
 /* Check if EHDR is a valid ELF header.  */
 static grub_err_t
 grub_dl_check_header (void *ehdr, grub_size_t size)
@@ -430,7 +455,7 @@ grub_dl_resolve_symbols (grub_dl_t mod, Elf_Ehdr *e)
   return GRUB_ERR_NONE;
 }
 
-static Elf_Shdr *
+Elf_Shdr *
 grub_dl_find_section (Elf_Ehdr *e, const char *name)
 {
   Elf_Shdr *s;

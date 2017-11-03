@@ -250,6 +250,8 @@ grub_err_t grub_arch_dl_check_header (void *ehdr);
 grub_err_t
 grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
 			       Elf_Shdr *s, grub_dl_segment_t seg);
+Elf_Shdr * grub_dl_find_section (Elf_Ehdr *e, const char *name);
+void *grub_dl_find_section_addr (grub_dl_t mod, Elf_Ehdr *e, const char *name);
 #endif
 
 #if defined (_mips)
