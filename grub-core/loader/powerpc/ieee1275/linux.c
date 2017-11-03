@@ -335,6 +335,10 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
   grub_addr_t addr;
   struct grub_linux_initrd_context initrd_ctx = { 0, 0, 0 };
 
+  // initialize, otherwise the fail path will try to
+  // free up data and segfault
+  initrd_ctx.components = NULL;
+
   if (argc == 0)
     {
       grub_error (GRUB_ERR_BAD_ARGUMENT, N_("filename expected"));
