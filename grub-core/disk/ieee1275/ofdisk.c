@@ -233,15 +233,18 @@ dev_iterate (const struct grub_ieee1275_devalias *alias)
          stays in memory and is never freed. */
       INIT_IEEE1275_COMMON (&args.common, "call-method", 2, 3);
       args.method = IEEE1275_ADDR("vscsi-report-luns");
-      args.ihandle = ihandle;
-      args.table = 0;
-      args.nentries = 0;
+      args.ihandle = IEEE1275_VALUE(ihandle);
+      args.table = IEEE1275_ADDR(0);
+      args.nentries = IEEE1275_VALUE(0);
 
-      if (IEEE1275_CALL_ENTRY_FN (&args) == -1 || args.catch_result)
+      if (IEEE1275_CALL_ENTRY_FN (&args) == -1 || IEEE1275_VALUE(args.catch_result))
 	{
 	  grub_ieee1275_close (ihandle);
 	  return;
 	}
+
+      args.table = IEEE1275_ADDR(args.table);
+      args.nentries = IEEE1275_VALUE(args.nentries);
 
       buf = grub_malloc (grub_strlen (alias->path) + 32);
       if (!buf)
@@ -253,6 +256,7 @@ dev_iterate (const struct grub_ieee1275_devalias *alias)
 	  grub_uint64_t *ptr;
 
 	  ptr = *(grub_uint64_t **) ((grub_addr_t)args.table + 4 + 8 * i);
+          ptr = (grub_uint64_t *) (grub_addr_t) IEEE1275_ADDR(ptr);
 	  while (*ptr)
 	    {
 	      grub_snprintf (bufptr, 32, "/disk@%" PRIxGRUB_UINT64_T, *ptr++);
@@ -715,8 +719,8 @@ grub_ofdisk_get_block_size (const char *device, grub_uint32_t *block_size,
 
   INIT_IEEE1275_COMMON (&args_ieee1275.common, "call-method", 2, 2);
   args_ieee1275.method = IEEE1275_ADDR("block-size");
-  args_ieee1275.ihandle = last_ihandle;
-  args_ieee1275.result = 1;
+  args_ieee1275.ihandle = IEEE1275_VALUE(last_ihandle);
+  args_ieee1275.result = IEEE1275_VALUE(1);
 
   if (IEEE1275_CALL_ENTRY_FN (&args_ieee1275) == -1)
     {
@@ -729,13 +733,16 @@ grub_ofdisk_get_block_size (const char *device, grub_uint32_t *block_size,
 		    (long long) args_ieee1275.result);
       op->block_size_fails++;
     }
-  else if (args_ieee1275.size1
-	   && !(args_ieee1275.size1 & (args_ieee1275.size1 - 1))
-	   && args_ieee1275.size1 >= 512 && args_ieee1275.size1 <= 16384)
-    {
-      op->block_size_fails = 0;
-      *block_size = args_ieee1275.size1;
-    }
+  else {
+    args_ieee1275.size1 = IEEE1275_VALUE(args_ieee1275.size1);
+    if (args_ieee1275.size1
+        && !(args_ieee1275.size1 & (args_ieee1275.size1 - 1))
+        && args_ieee1275.size1 >= 512 && args_ieee1275.size1 <= 16384)
+      {
+        op->block_size_fails = 0;
+        *block_size = args_ieee1275.size1;
+      }
+  }
 
   return 0;
 }

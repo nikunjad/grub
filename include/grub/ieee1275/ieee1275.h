@@ -49,12 +49,12 @@ struct grub_ieee1275_common_hdr
   grub_ieee1275_cell_t nr_outs;
 };
 
-#define IEEE1275_ADDR(x)         (grub_uint32_t)(grub_addr_t)(x)
-
+#define IEEE1275_ADDR(x)         (grub_uint32_t)grub_cpu_to_be32((grub_addr_t)(x))
+#define IEEE1275_VALUE(x)         (grub_uint32_t)grub_cpu_to_be32(x)
 #define INIT_IEEE1275_COMMON(p, xname, xins, xouts) \
   (p)->name = (grub_ieee1275_cell_t) IEEE1275_ADDR(xname); \
-  (p)->nr_ins = (grub_ieee1275_cell_t) xins; \
-  (p)->nr_outs = (grub_ieee1275_cell_t) xouts
+  (p)->nr_ins = (grub_ieee1275_cell_t) IEEE1275_VALUE(xins); \
+  (p)->nr_outs = (grub_ieee1275_cell_t) IEEE1275_VALUE(xouts)
 
 typedef grub_uint32_t grub_ieee1275_ihandle_t;
 typedef grub_uint32_t grub_ieee1275_phandle_t;

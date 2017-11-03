@@ -83,22 +83,22 @@ grub_get_datetime (struct grub_datetime *datetime)
     return grub_error (GRUB_ERR_IO, "couldn't open RTC");
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 2, 7);
-  args.device = (grub_ieee1275_cell_t) ihandle;
+  args.device = IEEE1275_VALUE((grub_ieee1275_cell_t) ihandle);
   args.method = IEEE1275_ADDR("get-time");
 
   status = IEEE1275_CALL_ENTRY_FN (&args);
 
   grub_ieee1275_close (ihandle);
 
-  if (status == -1 || args.catch_result)
+  if (status == -1 || IEEE1275_VALUE(args.catch_result))
     return grub_error (GRUB_ERR_IO, "get-time failed");
 
-  datetime->year = args.year;
-  datetime->month = args.month;
-  datetime->day = args.day + 1;
-  datetime->hour = args.hour;
-  datetime->minute = args.minute;
-  datetime->second = args.second;
+  datetime->year = IEEE1275_VALUE(args.year);
+  datetime->month = IEEE1275_VALUE(args.month);
+  datetime->day = IEEE1275_VALUE(args.day) + 1;
+  datetime->hour = IEEE1275_VALUE(args.hour);
+  datetime->minute = IEEE1275_VALUE(args.minute);
+  datetime->second = IEEE1275_VALUE(args.second);
 
   return GRUB_ERR_NONE;
 }
@@ -135,21 +135,21 @@ grub_set_datetime (struct grub_datetime *datetime)
     return grub_error (GRUB_ERR_IO, "couldn't open RTC");
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 8, 1);
-  args.device = (grub_ieee1275_cell_t) ihandle;
+  args.device = IEEE1275_VALUE((grub_ieee1275_cell_t) ihandle);
   args.method = IEEE1275_ADDR("set-time");
 
-  args.year = datetime->year;
-  args.month = datetime->month;
-  args.day = datetime->day - 1;
-  args.hour = datetime->hour;
-  args.minute = datetime->minute;
-  args.second = datetime->second;
+  args.year = IEEE1275_VALUE(datetime->year);
+  args.month = IEEE1275_VALUE(datetime->month);
+  args.day = IEEE1275_VALUE(datetime->day - 1);
+  args.hour = IEEE1275_VALUE(datetime->hour);
+  args.minute = IEEE1275_VALUE(datetime->minute);
+  args.second = IEEE1275_VALUE(datetime->second);
 
   status = IEEE1275_CALL_ENTRY_FN (&args);
 
   grub_ieee1275_close (ihandle);
 
-  if (status == -1 || args.catch_result)
+  if (status == -1 || IEEE1275_VALUE(args.catch_result))
     return grub_error (GRUB_ERR_IO, "set-time failed");
 
   return GRUB_ERR_NONE;

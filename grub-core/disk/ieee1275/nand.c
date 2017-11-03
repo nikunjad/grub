@@ -102,9 +102,9 @@ grub_nand_open (const char *name, grub_disk_t disk)
   data->handle = dev_ihandle;
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 2, 2);
-  args.method = (grub_ieee1275_cell_t) "block-size";
-  args.ihandle = dev_ihandle;
-  args.result = 1;
+  args.method = IEEE1275_ADDR("block-size");
+  args.ihandle = IEEE1275_VALUE(dev_ihandle);
+  args.result = IEEE1275_VALUE(1);
 
   if ((IEEE1275_CALL_ENTRY_FN (&args) == -1) || (args.result))
     {
@@ -120,19 +120,19 @@ grub_nand_open (const char *name, grub_disk_t disk)
     }
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 2, 3);
-  args.method = (grub_ieee1275_cell_t) "size";
-  args.ihandle = dev_ihandle;
-  args.result = 1;
+  args.method = IEEE1275_ADDR("size");
+  args.ihandle = IEEE1275_VALUE(dev_ihandle);
+  args.result = IEEE1275_VALUE(1);
 
-  if ((IEEE1275_CALL_ENTRY_FN (&args) == -1) || (args.result))
+  if ((IEEE1275_CALL_ENTRY_FN (&args) == -1) || IEEE1275_VALUE(args.result))
     {
       grub_error (GRUB_ERR_UNKNOWN_DEVICE, "can't get disk size");
       goto fail;
     }
 
-  disk->total_sectors = args.size1;
+  disk->total_sectors = IEEE1275_VALUE(args.size1);
   disk->total_sectors <<= 32;
-  disk->total_sectors += args.size2;
+  disk->total_sectors += IEEE1275_VALUE(args.size2);
   disk->total_sectors >>= GRUB_DISK_SECTOR_BITS;
 
   disk->id = dev_ihandle;
@@ -175,10 +175,10 @@ grub_nand_read (grub_disk_t disk, grub_disk_addr_t sector,
     } args;
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 6, 1);
-  args.method = (grub_ieee1275_cell_t) "pio-read";
-  args.ihandle = data->handle;
-  args.buf = (grub_ieee1275_cell_t) buf;
-  args.page = (grub_ieee1275_cell_t) ((grub_size_t) sector / data->block_size);
+  args.method = IEEE1275_ADDR("pio-read");
+  args.ihandle = IEEE1275_VALUE(data->handle);
+  args.buf =  buf;
+  args.page = (grub_size_t) sector / data->block_size;
 
   ofs = ((grub_size_t) sector % data->block_size) << GRUB_DISK_SECTOR_BITS;
   size <<= GRUB_DISK_SECTOR_BITS;
@@ -190,16 +190,20 @@ grub_nand_read (grub_disk_t disk, grub_disk_addr_t sector,
 
       len = (ofs + size > bsize) ? (bsize - ofs) : size;
 
-      args.len = (grub_ieee1275_cell_t) len;
-      args.ofs = (grub_ieee1275_cell_t) ofs;
-      args.result = 1;
+      args.len = IEEE1275_VALUE(len);
+      args.ofs = IEEE1275_VALUE(ofs);
+      args.result = IEEE1275_VALUE(1);
+      args.buf =  IEEE1275_ADDR(args.buf);
+      args.page =  IEEE1275_VALUE(args.page);
 
-      if ((IEEE1275_CALL_ENTRY_FN (&args) == -1) || (args.result))
+      if ((IEEE1275_CALL_ENTRY_FN (&args) == -1) || IEEE1275_VALUE(args.result))
         return grub_error (GRUB_ERR_READ_ERROR, N_("failure reading sector 0x%llx "
 						   "from `%s'"),
 			   (unsigned long long) sector,
 			   disk->name);
 
+      args.buf =  IEEE1275_ADDR(args.buf);
+      args.page =  IEEE1275_VALUE(args.page);
       ofs = 0;
       size -= len;
       args.buf += len;

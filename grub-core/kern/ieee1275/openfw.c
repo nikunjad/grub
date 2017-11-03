@@ -286,20 +286,20 @@ grub_ieee1275_map (grub_addr_t phys, grub_addr_t virt, grub_size_t size,
 #endif
 			1);
   args.method = IEEE1275_ADDR("map");
-  args.ihandle = grub_ieee1275_mmu;
+  args.ihandle = IEEE1275_VALUE(grub_ieee1275_mmu);
 #ifdef __sparc__
   args.phys_high = 0;
 #endif
-  args.phys_low = phys;
-  args.virt = virt;
-  args.size = size;
-  args.mode = mode; /* Format is WIMG0PP.  */
-  args.catch_result = (grub_ieee1275_cell_t) -1;
+  args.phys_low = IEEE1275_ADDR(phys);
+  args.virt = IEEE1275_ADDR(virt);
+  args.size = IEEE1275_VALUE(size);
+  args.mode = IEEE1275_VALUE(mode); /* Format is WIMG0PP.  */
+  args.catch_result = IEEE1275_VALUE((grub_ieee1275_cell_t) -1);
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
     return -1;
 
-  return args.catch_result;
+  return IEEE1275_VALUE(args.catch_result);
 }
 
 grub_err_t
@@ -545,10 +545,12 @@ grub_ieee1275_canonicalise_devname (const char *path)
       INIT_IEEE1275_COMMON (&args.common, "canon", 3, 1);
       args.path = IEEE1275_ADDR(path);
       args.buf = IEEE1275_ADDR(buf);
-      args.inlen = (grub_ieee1275_cell_t) (bufsize - 1);
+      args.inlen = IEEE1275_VALUE(bufsize - 1);
 
       if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
 	return 0;
+
+      args.outlen = IEEE1275_VALUE(args.outlen);
       if (args.outlen > bufsize - 1)
 	{
 	  bufsize = args.outlen + 2;
@@ -560,4 +562,3 @@ grub_ieee1275_canonicalise_devname (const char *path)
   grub_free (buf);
   return NULL;
 }
-

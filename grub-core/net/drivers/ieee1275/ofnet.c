@@ -328,16 +328,16 @@ grub_ieee1275_alloc_mem (grub_size_t len)
     }
 
   INIT_IEEE1275_COMMON (&args.common, "interpret", 2, 2);
-  args.len = len;
+  args.len = IEEE1275_VALUE(len);
   args.method = IEEE1275_ADDR("alloc-mem");
 
-  if (IEEE1275_CALL_ENTRY_FN (&args) == -1 || args.catch)
+  if (IEEE1275_CALL_ENTRY_FN (&args) == -1 || IEEE1275_VALUE(args.catch))
     {
       grub_error (GRUB_ERR_INVALID_COMMAND, N_("alloc-mem failed"));
       return NULL;
     }
   else
-    return (void *) (grub_addr_t) args.result;
+    return (void *) (grub_addr_t) IEEE1275_VALUE(args.result);
 }
 
 /* Free memory allocated by alloc-mem */
@@ -362,10 +362,10 @@ grub_ieee1275_free_mem (void *addr, grub_size_t len)
 
   INIT_IEEE1275_COMMON (&args.common, "interpret", 3, 1);
   args.addr = IEEE1275_ADDR(addr);
-  args.len = len;
+  args.len = IEEE1275_VALUE(len);
   args.method = IEEE1275_ADDR("free-mem");
 
-  if (IEEE1275_CALL_ENTRY_FN(&args) == -1 || args.catch)
+  if (IEEE1275_CALL_ENTRY_FN(&args) == -1 || IEEE1275_VALUE(args.catch))
     {
       grub_error (GRUB_ERR_INVALID_COMMAND, N_("free-mem failed"));
       return grub_errno;
