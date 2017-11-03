@@ -232,7 +232,7 @@ dev_iterate (const struct grub_ieee1275_devalias *alias)
          firmware takes care of all memory management and the result table
          stays in memory and is never freed. */
       INIT_IEEE1275_COMMON (&args.common, "call-method", 2, 3);
-      args.method = (grub_ieee1275_cell_t) "vscsi-report-luns";
+      args.method = IEEE1275_ADDR("vscsi-report-luns");
       args.ihandle = ihandle;
       args.table = 0;
       args.nentries = 0;
@@ -714,7 +714,7 @@ grub_ofdisk_get_block_size (const char *device, grub_uint32_t *block_size,
     return GRUB_ERR_NONE;
 
   INIT_IEEE1275_COMMON (&args_ieee1275.common, "call-method", 2, 2);
-  args_ieee1275.method = (grub_ieee1275_cell_t) "block-size";
+  args_ieee1275.method = IEEE1275_ADDR("block-size");
   args_ieee1275.ihandle = last_ihandle;
   args_ieee1275.result = 1;
 

@@ -329,7 +329,7 @@ grub_ieee1275_alloc_mem (grub_size_t len)
 
   INIT_IEEE1275_COMMON (&args.common, "interpret", 2, 2);
   args.len = len;
-  args.method = (grub_ieee1275_cell_t) "alloc-mem";
+  args.method = IEEE1275_ADDR("alloc-mem");
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1 || args.catch)
     {
@@ -361,9 +361,9 @@ grub_ieee1275_free_mem (void *addr, grub_size_t len)
     }
 
   INIT_IEEE1275_COMMON (&args.common, "interpret", 3, 1);
-  args.addr = (grub_ieee1275_cell_t)addr;
+  args.addr = IEEE1275_ADDR(addr);
   args.len = len;
-  args.method = (grub_ieee1275_cell_t) "free-mem";
+  args.method = IEEE1275_ADDR("free-mem");
 
   if (IEEE1275_CALL_ENTRY_FN(&args) == -1 || args.catch)
     {

@@ -84,7 +84,7 @@ grub_get_datetime (struct grub_datetime *datetime)
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 2, 7);
   args.device = (grub_ieee1275_cell_t) ihandle;
-  args.method = (grub_ieee1275_cell_t) "get-time";
+  args.method = IEEE1275_ADDR("get-time");
 
   status = IEEE1275_CALL_ENTRY_FN (&args);
 
@@ -136,7 +136,7 @@ grub_set_datetime (struct grub_datetime *datetime)
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 8, 1);
   args.device = (grub_ieee1275_cell_t) ihandle;
-  args.method = (grub_ieee1275_cell_t) "set-time";
+  args.method = IEEE1275_ADDR("set-time");
 
   args.year = datetime->year;
   args.month = datetime->month;

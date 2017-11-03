@@ -285,7 +285,7 @@ grub_ieee1275_map (grub_addr_t phys, grub_addr_t virt, grub_size_t size,
 			6,
 #endif
 			1);
-  args.method = (grub_ieee1275_cell_t) "map";
+  args.method = IEEE1275_ADDR("map");
   args.ihandle = grub_ieee1275_mmu;
 #ifdef __sparc__
   args.phys_high = 0;
@@ -543,8 +543,8 @@ grub_ieee1275_canonicalise_devname (const char *path)
 	return NULL;
 
       INIT_IEEE1275_COMMON (&args.common, "canon", 3, 1);
-      args.path = (grub_ieee1275_cell_t) path;
-      args.buf = (grub_ieee1275_cell_t) buf;
+      args.path = IEEE1275_ADDR(path);
+      args.buf = IEEE1275_ADDR(buf);
       args.inlen = (grub_ieee1275_cell_t) (bufsize - 1);
 
       if (IEEE1275_CALL_ENTRY_FN (&args) == -1)

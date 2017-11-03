@@ -38,7 +38,7 @@ grub_ieee1275_finddevice (const char *name, grub_ieee1275_phandle_t *phandlep)
   args;
 
   INIT_IEEE1275_COMMON (&args.common, "finddevice", 1, 1);
-  args.device = (grub_ieee1275_cell_t) name;
+  args.device = IEEE1275_ADDR(name);
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
     return -1;
@@ -66,8 +66,8 @@ grub_ieee1275_get_property (grub_ieee1275_phandle_t phandle,
 
   INIT_IEEE1275_COMMON (&args.common, "getprop", 4, 1);
   args.phandle = phandle;
-  args.prop = (grub_ieee1275_cell_t) property;
-  args.buf = (grub_ieee1275_cell_t) buf;
+  args.prop = IEEE1275_ADDR(property);
+  args.buf = IEEE1275_ADDR(buf);
   args.buflen = (grub_ieee1275_cell_t) size;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -115,8 +115,8 @@ grub_ieee1275_next_property (grub_ieee1275_phandle_t phandle, char *prev_prop,
 
   INIT_IEEE1275_COMMON (&args.common, "nextprop", 3, 1);
   args.phandle = phandle;
-  args.prev_prop = (grub_ieee1275_cell_t) prev_prop;
-  args.next_prop = (grub_ieee1275_cell_t) prop;
+  args.prev_prop = IEEE1275_ADDR(prev_prop);
+  args.next_prop = IEEE1275_ADDR(prop);
   args.flags = (grub_ieee1275_cell_t) -1;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -139,7 +139,7 @@ grub_ieee1275_get_property_length (grub_ieee1275_phandle_t phandle,
 
   INIT_IEEE1275_COMMON (&args.common, "getproplen", 2, 1);
   args.phandle = phandle;
-  args.prop = (grub_ieee1275_cell_t) prop;
+  args.prop = IEEE1275_ADDR(prop);
   args.length = (grub_ieee1275_cell_t) -1;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -190,7 +190,7 @@ grub_ieee1275_package_to_path (grub_ieee1275_phandle_t phandle,
 
   INIT_IEEE1275_COMMON (&args.common, "package-to-path", 3, 1);
   args.phandle = phandle;
-  args.buf = (grub_ieee1275_cell_t) path;
+  args.buf = IEEE1275_ADDR(path);
   args.buflen = (grub_ieee1275_cell_t) len;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -219,7 +219,7 @@ grub_ieee1275_instance_to_path (grub_ieee1275_ihandle_t ihandle,
 
   INIT_IEEE1275_COMMON (&args.common, "instance-to-path", 3, 1);
   args.ihandle = ihandle;
-  args.buf = (grub_ieee1275_cell_t) path;
+  args.buf = IEEE1275_ADDR(path);
   args.buflen = (grub_ieee1275_cell_t) len;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -247,7 +247,7 @@ grub_ieee1275_write (grub_ieee1275_ihandle_t ihandle, const void *buffer,
 
   INIT_IEEE1275_COMMON (&args.common, "write", 3, 1);
   args.ihandle = ihandle;
-  args.buf = (grub_ieee1275_cell_t) buffer;
+  args.buf = IEEE1275_ADDR(buffer);
   args.len = (grub_ieee1275_cell_t) len;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -273,7 +273,7 @@ grub_ieee1275_read (grub_ieee1275_ihandle_t ihandle, void *buffer,
 
   INIT_IEEE1275_COMMON (&args.common, "read", 3, 1);
   args.ihandle = ihandle;
-  args.buf = (grub_ieee1275_cell_t) buffer;
+  args.buf = IEEE1275_ADDR(buffer);
   args.len = (grub_ieee1275_cell_t) len;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -401,7 +401,7 @@ grub_ieee1275_interpret (const char *command, grub_ieee1275_cell_t *catch)
     return -1;
 
   INIT_IEEE1275_COMMON (&args.common, "interpret", 1, 1);
-  args.command = (grub_ieee1275_cell_t) command;
+  args.command = IEEE1275_ADDR(command);
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
     return -1;
@@ -453,7 +453,7 @@ grub_ieee1275_open (const char *path, grub_ieee1275_ihandle_t *result)
   args;
 
   INIT_IEEE1275_COMMON (&args.common, "open", 1, 1);
-  args.path = (grub_ieee1275_cell_t) path;
+  args.path = IEEE1275_ADDR(path);
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
     return -1;
@@ -548,8 +548,8 @@ grub_ieee1275_set_property (grub_ieee1275_phandle_t phandle,
 
   INIT_IEEE1275_COMMON (&args.common, "setprop", 4, 1);
   args.size = (grub_ieee1275_cell_t) size;
-  args.buf = (grub_ieee1275_cell_t) buf;
-  args.propname = (grub_ieee1275_cell_t) propname;
+  args.buf = IEEE1275_ADDR(buf);
+  args.propname = IEEE1275_ADDR(propname);
   args.phandle = (grub_ieee1275_cell_t) phandle;
 
   if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
@@ -578,7 +578,7 @@ grub_ieee1275_set_color (grub_ieee1275_ihandle_t ihandle,
   args;
 
   INIT_IEEE1275_COMMON (&args.common, "call-method", 6, 1);
-  args.method = (grub_ieee1275_cell_t) "color!";
+  args.method = IEEE1275_ADDR("color!");
   args.ihandle = ihandle;
   args.index = index;
   args.r = r;
