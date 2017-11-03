@@ -25,4 +25,10 @@
 #define GRUB_IEEE1275_CELL_SIZEOF 4
 typedef grub_uint32_t grub_ieee1275_cell_t;
 
+#ifdef __powerpc64__
+int EXPORT_FUNC(ieee1275_call_entry_fn)(void *args, void *entry);
+#define	IEEE1275_CALL_ENTRY_FN(args)	\
+		ieee1275_call_entry_fn((args), grub_ieee1275_entry_fn)
+#endif
+
 #endif /* ! GRUB_IEEE1275_MACHINE_HEADER */
