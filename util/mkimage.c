@@ -327,8 +327,21 @@ static const struct grub_install_image_target_desc image_targets[] =
     {
       .dirname = "powerpc-ieee1275",
       .names = { "powerpc-ieee1275", NULL },
+
+#ifdef __powerpc64__
+      .voidp_sizeof = 8,
+      .elf_target = EM_PPC64,
+#else
       .voidp_sizeof = 4,
+      .elf_target = EM_PPC,
+#endif
+
+#ifdef __powerpc64le__
+      .bigendian = 0,
+#else
       .bigendian = 1,
+#endif
+
       .id = IMAGE_PPC, 
       .flags = PLATFORM_FLAGS_NONE,
       .total_module_size = TARGET_NO_FIELD,
@@ -338,7 +351,6 @@ static const struct grub_install_image_target_desc image_targets[] =
       .section_align = 1,
       .vaddr_offset = 0,
       .link_addr = GRUB_KERNEL_POWERPC_IEEE1275_LINK_ADDR,
-      .elf_target = EM_PPC,
       .mod_gap = GRUB_KERNEL_POWERPC_IEEE1275_MOD_GAP,
       .mod_align = GRUB_KERNEL_POWERPC_IEEE1275_MOD_ALIGN,
       .link_align = 4
