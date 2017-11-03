@@ -18,6 +18,7 @@
 
 #include <grub/symbol.h>
 #include <grub/dl.h>
+#include <ppc-asm.h>
 
 	.file	"setjmp.S"
 
@@ -38,7 +39,7 @@ GRUB_MOD_LICENSE "GPLv3+"
 /*
  * int grub_setjmp (grub_jmp_buf env)
  */
-FUNCTION(grub_setjmp)
+FUNC_START(grub_setjmp)
 	STORE	1, 0(3)
 	STORE	14, 1*SZ_LONG(3)
 	STORE	15, 2*SZ_LONG(3)
@@ -64,11 +65,12 @@ FUNCTION(grub_setjmp)
 	STORE	4, 20*SZ_LONG(3)
 	li	3, 0
 	blr
+FUNC_END(grub_setjmp)
 
 /*
  * int grub_longjmp (grub_jmp_buf env, int val)
  */
-FUNCTION(grub_longjmp)
+FUNC_START(grub_longjmp)
 	LOAD	1, 0(3)
 	LOAD	14, 1*SZ_LONG(3)
 	LOAD	15, 2*SZ_LONG(3)
@@ -96,4 +98,4 @@ FUNCTION(grub_longjmp)
 	bne	1f
 	li	3, 1
 1:	blr
-
+FUNC_END(grub_longjmp)

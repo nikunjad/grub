@@ -17,10 +17,12 @@
  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <ppc-asm.h>
+
 	.text
 
 	.align 2
-	.globl grub_arch_sync_caches
-grub_arch_sync_caches:
+FUNC_START(grub_arch_sync_caches)
 #include "cache_flush.S"
 	blr
+FUNC_END(grub_arch_sync_caches)
