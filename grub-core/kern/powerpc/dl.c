@@ -94,6 +94,7 @@ grub_err_t
 grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
 			       Elf_Shdr *s, grub_dl_segment_t seg)
 {
+#ifdef powerpc
   Elf_Rela *rel, *max;
 
   for (rel = (Elf_Rela *) ((char *) ehdr + s->sh_offset),
@@ -155,7 +156,6 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
 	case GRUB_ELF_R_PPC_REL32:
 	  *addr = value - (Elf_Word) addr;
 	  break;
-
 	default:
 	  return grub_error (GRUB_ERR_NOT_IMPLEMENTED_YET,
 			     N_("relocation 0x%x is not implemented yet"),
@@ -164,4 +164,9 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
     }
 
   return GRUB_ERR_NONE;
+#else
+  return grub_error (GRUB_ERR_NOT_IMPLEMENTED_YET,
+     N_("relocation is not implemented yet for module=%llx ehdr=%llx Elf_Shdr=%llx seg=%llx"), 
+     mod, ehdr, s, seg);
+#endif
 }
