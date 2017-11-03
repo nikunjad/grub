@@ -243,6 +243,7 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc 
 
   ehdr->e_shoff = grub_host_to_target32 ((grub_uint8_t *) shdr
 					 - (grub_uint8_t *) ehdr);
+
   if (image_target->id == IMAGE_LOONGSON_ELF)
     ehdr->e_shentsize = grub_host_to_target16 (0);
   else
@@ -264,8 +265,11 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc 
   if (image_target->id == IMAGE_LOONGSON_ELF)
     ehdr->e_flags = grub_host_to_target32 (0x1000 | EF_MIPS_NOREORDER 
 					   | EF_MIPS_PIC | EF_MIPS_CPIC);
+  else (image_target->id == IMAGE_PPC && image_target->bigendian == 0)
+         ehdr->e_flags = grub_host_to_target32(EF_PPC64LE_ABIV2);
   else
     ehdr->e_flags = 0;
+
   if (image_target->id == IMAGE_LOONGSON_ELF)
     {
       phdr->p_filesz = grub_host_to_target32 (*core_size);

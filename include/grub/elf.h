@@ -1851,6 +1851,7 @@ typedef Elf32_Addr Elf32_Conflict;
 
 /* Values for Elf32/64_Ehdr.e_flags.  */
 #define EF_PPC_EMB		0x80000000	/* PowerPC embedded flag */
+#define EF_PPC64LE_ABIV2	0x00000002	/* PowerPC 64 LE flag */
 
 /* Cygnus local bits below */
 #define EF_PPC_RELOCATABLE	0x00010000	/* PowerPC -mrelocatable flag*/
