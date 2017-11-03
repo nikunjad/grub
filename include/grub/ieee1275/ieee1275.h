@@ -148,6 +148,10 @@ enum grub_ieee1275_flag
   GRUB_IEEE1275_FLAG_BROKEN_REPEAT,
 
   GRUB_IEEE1275_FLAG_CURSORONOFF_ANSI_BROKEN,
+
+#ifdef __powerpc64le__
+  GRUB_IEEE1275_FLAG_DISABLE_VIDEO_SUPPORT
+#endif
 };
 
 extern int EXPORT_FUNC(grub_ieee1275_test_flag) (enum grub_ieee1275_flag flag);
