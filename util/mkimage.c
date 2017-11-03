@@ -328,7 +328,7 @@ static const struct grub_install_image_target_desc image_targets[] =
       .dirname = "powerpc-ieee1275",
       .names = { "powerpc-ieee1275", NULL },
 
-#ifdef __powerpc64__
+#if defined(__powerpc64__) || defined(__powerpc64le__)
       .voidp_sizeof = 8,
       .elf_target = EM_PPC64,
 #else
