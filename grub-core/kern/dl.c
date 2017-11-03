@@ -304,7 +304,12 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
 	    {
 	      void *addr;
 
+#ifdef __powerpc64le__
+	      ptr = (char *) ALIGN_UP ((grub_addr_t) ptr,
+                             (s->sh_addralign < 4 ? 4 : s->sh_addralign));
+#else
 	      ptr = (char *) ALIGN_UP ((grub_addr_t) ptr, s->sh_addralign);
+#endif
 	      addr = ptr;
 	      ptr += s->sh_size;
 
