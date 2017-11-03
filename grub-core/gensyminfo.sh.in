@@ -34,4 +34,9 @@ else
 fi
 
 # Print all undefined symbols used by module
-@TARGET_NM@ -u @TARGET_NMFLAGS_MINUS_P@ -p $module | sed "s@^\([^ ]*\).*@undefined $modname \1@g"
+if test x"@GRUB_TARGET_CPU@" = xpowerpc; then
+    #ignore the special .TOC. symbol on powerpc64le
+    @TARGET_NM@ -u @TARGET_NMFLAGS_MINUS_P@ -p $module | grep -w -v '.TOC.' 
+else
+    @TARGET_NM@ -u @TARGET_NMFLAGS_MINUS_P@ -p $module
+fi  | sed "s@^\([^ ]*\).*@undefined $modname \1@g"
