@@ -84,8 +84,8 @@ grub_cpu_relocator_backward (void *ptr0, void *src, void *dest,
 			     grub_size_t size)
 {
   void *ptr = ptr0;
-  write_reg (8, (grub_uint32_t) src, &ptr);
-  write_reg (9, (grub_uint32_t) dest, &ptr);
+  write_reg (8, (grub_uint32_t) (grub_addr_t) src, &ptr);
+  write_reg (9, (grub_uint32_t) (grub_addr_t) dest, &ptr);
   write_reg (10, (grub_uint32_t) size, &ptr);
   grub_memcpy (ptr, &grub_relocator_backward_start,
 	       RELOCATOR_SRC_SIZEOF (backward));
@@ -96,8 +96,8 @@ grub_cpu_relocator_forward (void *ptr0, void *src, void *dest,
 			     grub_size_t size)
 {
   void *ptr = ptr0;
-  write_reg (8, (grub_uint32_t) src, &ptr);
-  write_reg (9, (grub_uint32_t) dest, &ptr);
+  write_reg (8, (grub_uint32_t) (grub_addr_t) src, &ptr);
+  write_reg (9, (grub_uint32_t) (grub_addr_t) dest, &ptr);
   write_reg (10, (grub_uint32_t) size, &ptr);
   grub_memcpy (ptr, &grub_relocator_forward_start, 
 	       RELOCATOR_SRC_SIZEOF (forward));

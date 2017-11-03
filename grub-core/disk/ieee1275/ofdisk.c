@@ -252,7 +252,7 @@ dev_iterate (const struct grub_ieee1275_devalias *alias)
 	{
 	  grub_uint64_t *ptr;
 
-	  ptr = *(grub_uint64_t **) (args.table + 4 + 8 * i);
+	  ptr = *(grub_uint64_t **) ((grub_addr_t)args.table + 4 + 8 * i);
 	  while (*ptr)
 	    {
 	      grub_snprintf (bufptr, 32, "/disk@%" PRIxGRUB_UINT64_T, *ptr++);

@@ -337,7 +337,7 @@ grub_ieee1275_alloc_mem (grub_size_t len)
       return NULL;
     }
   else
-    return (void *)args.result;
+    return (void *) (grub_addr_t) args.result;
 }
 
 /* Free memory allocated by alloc-mem */
