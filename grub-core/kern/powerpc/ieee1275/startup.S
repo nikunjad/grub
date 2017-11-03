@@ -19,15 +19,28 @@
 
 #include <grub/symbol.h>
 #include <grub/offsets.h>
+#include <ppc-asm.h>
 
 .extern __bss_start
 .extern _end
 
 	.text
-	.align	2
-	.globl	start, _start
-start:
-_start:
+
+FUNC_START(_start)
+
+#if defined(_CALL_ELF) && _CALL_ELF == 2  /* LITTLE ENDIAN */
+	 tdi  0,0,0x48              /* Reverse endian of b . + 8          */
+         b    $+36                  /* Skip trampoline if already LE mode */ 
+        .long 0x05009f42            /* bcl 20,31,$+4                      */
+        .long 0xa602487d            /* mflr r10                           */
+        .long 0x1c004a39            /* addi r10,r10,28                    */
+        .long 0xa600607d            /* mfmsr r11                          */
+        .long 0x01006b69            /* xori r11,r11,1                     */
+        .long 0xa6035a7d            /* mtsrr0 r10                         */
+        .long 0xa6037b7d            /* mtsrr1 r11                         */
+        .long 0x2400004c            /* rfid                               */
+#endif
+
 	li      2, 0
 	li      13, 0
 
@@ -61,7 +74,19 @@ _start:
 
 	/* Store r5 in grub_ieee1275_entry_fn.  */
 	lis	9, grub_ieee1275_entry_fn@ha
+#if defined(_CALL_ELF) && _CALL_ELF == 1  /* BIG ENDIAN */
+	std	5, grub_ieee1275_entry_fn@l(9)
+#else
 	stw	5, grub_ieee1275_entry_fn@l(9)
+#endif
+
+#if defined(_CALL_ELF) && _CALL_ELF == 2  /* LITTLE ENDIAN */
+	bl	3f
+3:	mflr	9
+	addis	2,9,.TOC.-3b@ha
+	addi	2,2,.TOC.-3b@l
+#endif
 
 	bl	grub_main
 1:	b	1b
+FUNC_END(_start)
