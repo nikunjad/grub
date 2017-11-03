@@ -75,7 +75,7 @@ grub_TRANSFORM([grub-file])
 if test "x$TARGET_CFLAGS" = x; then
   if test "x$target_cpu" = xpowerpc64le; then
      #HACK till savegpr/addgpr is supported
-     TARGET_CFLAGS="$TARGET_CFLAGS -O1"
+     TARGET_CFLAGS="$TARGET_CFLAGS -O1 -mno-altivec -mno-vsx"
   else
      TARGET_CFLAGS="$TARGET_CFLAGS -Os"
   fi
