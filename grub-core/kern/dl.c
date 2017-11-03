@@ -343,6 +343,26 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
   return GRUB_ERR_NONE;
 }
 
+#ifdef __powerpc64le__
+static int
+grub_dl_find_section_index (Elf_Ehdr *e, const char *name)
+{ 
+  Elf_Shdr *s;
+  const char *str;
+  unsigned i;
+
+  s = (Elf_Shdr *) ((char *) e + e->e_shoff + e->e_shstrndx * e->e_shentsize);
+  str = (char *) e + s->sh_offset;
+
+  for (i = 0, s = (Elf_Shdr *) ((char *) e + e->e_shoff);
+       i < e->e_shnum;
+       i++, s = (Elf_Shdr *) ((char *) s + e->e_shentsize))
+    if (grub_strcmp (str + s->sh_name, name) == 0)
+      return i;
+  return -1;
+}
+#endif
+
 static grub_err_t
 grub_dl_resolve_symbols (grub_dl_t mod, Elf_Ehdr *e)
 {
@@ -395,7 +415,19 @@ grub_dl_resolve_symbols (grub_dl_t mod, Elf_Ehdr *e)
 	  /* Resolve a global symbol.  */
 	  if (sym->st_name != 0 && sym->st_shndx == 0)
 	    {
-	      grub_symbol_t nsym = grub_dl_resolve_symbol (name);
+	      grub_symbol_t nsym;
+
+#ifdef __powerpc64le__
+              if (grub_strcmp(name, ".TOC.") == 0) {
+                int j = grub_dl_find_section_index (e, ".toc");
+                if (j < 0)
+                    return grub_error (GRUB_ERR_BAD_MODULE,
+                                   N_("section '.toc' not found"), name);
+                sym->st_value = (Elf_Addr) grub_dl_get_section_addr (mod, j);
+                break;
+              }
+#endif
+	      nsym = grub_dl_resolve_symbol (name);
 	      if (! nsym)
 		return grub_error (GRUB_ERR_BAD_MODULE,
 				   N_("symbol `%s' not found"), name);
