@@ -6,6 +6,10 @@
 #define __powerpc__ 1
 #endif
 
+#if defined(__PPC64__) && defined(__LITTLE_ENDIAN__)
+#define __powerpc64le__ 1
+#endif
+
 #define GCRYPT_NO_DEPRECATED 1
 #define HAVE_MEMMOVE 1
 

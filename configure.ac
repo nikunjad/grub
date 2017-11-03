@@ -139,7 +139,7 @@ case "$target_cpu"-"$platform" in
   x86_64-none) ;;
   x86_64-*) target_cpu=i386 ;;
   powerpc64-ieee1275) target_cpu=powerpc ;;
-  powerpc64le-ieee1275) target_cpu=powerpc ;;
+  powerpc64le-ieee1275) target_cpu=powerpc; do_bits=64 ;;
 esac
 
 # Check if the platform is supported, make final adjustments.
@@ -349,6 +349,11 @@ AC_SYS_LARGEFILE
 
 # Identify characteristics of the host architecture.
 unset ac_cv_c_bigendian
+
+if test -n "$do_bits" ; then
+   target_m32=0;
+   target_m64=1;
+fi
 
 if test x"$target_cpu-$platform" = xsparc64-emu ; then
   CFLAGS="$CFLAGS -m64"
