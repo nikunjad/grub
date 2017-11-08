@@ -534,6 +534,7 @@ main (int argc, char *argv[])
     {
       if (source_dirs[GRUB_INSTALL_PLATFORM_I386_PC]
 	  || source_dirs[GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275]
+	  || source_dirs[GRUB_INSTALL_PLATFORM_POWERPC_EFI]
 	  || source_dirs[GRUB_INSTALL_PLATFORM_I386_EFI]
 	  || source_dirs[GRUB_INSTALL_PLATFORM_IA64_EFI]
 	  || source_dirs[GRUB_INSTALL_PLATFORM_ARM_EFI]
@@ -735,7 +736,8 @@ main (int argc, char *argv[])
       || source_dirs[GRUB_INSTALL_PLATFORM_X86_64_EFI]
       || source_dirs[GRUB_INSTALL_PLATFORM_IA64_EFI]
       || source_dirs[GRUB_INSTALL_PLATFORM_ARM_EFI]
-      || source_dirs[GRUB_INSTALL_PLATFORM_ARM64_EFI])
+      || source_dirs[GRUB_INSTALL_PLATFORM_ARM64_EFI]
+      || source_dirs[GRUB_INSTALL_PLATFORM_POWERPC_EFI])
     {
       char *efidir = grub_util_make_temporary_dir ();
       char *efidir_efi = grub_util_path_concat (2, efidir, "efi");
@@ -768,6 +770,10 @@ main (int argc, char *argv[])
       imgname = grub_util_path_concat (2, efidir_efi_boot, "bootaa64.efi");
       make_image_fwdisk_abs (GRUB_INSTALL_PLATFORM_ARM64_EFI, "arm64-efi",
 			     imgname);
+      free (imgname);
+
+      imgname = grub_util_path_concat (2, efidir_efi_boot, "bootppc.efi");
+      make_image_fwdisk_abs (GRUB_INSTALL_PLATFORM_POWERPC_EFI, "powerpc-efi", imgname);
       free (imgname);
 
       if (source_dirs[GRUB_INSTALL_PLATFORM_I386_EFI])

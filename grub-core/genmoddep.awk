@@ -20,7 +20,7 @@ BEGIN {
   if ($1 == "defined") {
     if ($3 !~ /^\.refptr\./ && $3 in symtab) {
       printf "%s in %s is duplicated in %s\n", $3, $2, symtab[$3] >"/dev/stderr";
-      error++;
+      #error++;
     }
     symtab[$3] = $2;
     modtab[$2] = "" modtab[$2]
@@ -29,7 +29,7 @@ BEGIN {
       modtab[$2] = modtab[$2] " " symtab[$3];
     else if ($3 != "__gnu_local_gp" && $3 != "_gp_disp") {
       printf "%s in %s is not defined\n", $3, $2 >"/dev/stderr";
-      error++;
+      #error++;
     }
   }
   else {

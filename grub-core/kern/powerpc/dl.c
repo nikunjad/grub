@@ -267,6 +267,15 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
 	  *(Elf_Half *) addr = ((*(Elf_Half *) addr) & ~0xfffc) | (value & 0xfffc);
 	  break;
 
+        case GRUB_ELF_R_PPC64_TOC16_DS:
+           value -= grub_arch_dl_get_toc(mod, ehdr);
+           if (value & 3)
+            return grub_error (GRUB_ERR_BAD_MODULE,
+                               "bad TOC16_DS relocation");
+
+          *(Elf_Half *) addr = ((*(Elf_Half *) addr) & ~0xfffc) | (value & 0xfffc);
+          break;
+
 	case GRUB_ELF_R_PPC64_REL16_HA:
 	  value -=  (unsigned long) addr;
 	  *(Elf_Half *) addr = PPC_HA(value);

@@ -674,6 +674,7 @@ static struct
     [GRUB_INSTALL_PLATFORM_ARM64_EFI] =        { "arm64",   "efi"       },
     [GRUB_INSTALL_PLATFORM_ARM_UBOOT] =        { "arm",     "uboot"     },
     [GRUB_INSTALL_PLATFORM_ARM_COREBOOT] =     { "arm",     "coreboot"  },
+    [GRUB_INSTALL_PLATFORM_POWERPC_EFI] =      { "powerpc", "efi"       },
   }; 
 
 char *

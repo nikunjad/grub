@@ -420,6 +420,24 @@ static const struct grub_install_image_target_desc image_targets[] =
       .elf_target = EM_IA_64,
     },
     {
+      .dirname = "powerpc-efi",
+      .names = { "powerpc-efi", NULL },
+      .voidp_sizeof = 8,
+      .bigendian = 0,
+      .id = IMAGE_EFI,
+      .flags = PLATFORM_FLAGS_NONE,
+      .total_module_size = TARGET_NO_FIELD,
+      .decompressor_compressed_size = TARGET_NO_FIELD,
+      .decompressor_uncompressed_size = TARGET_NO_FIELD,
+      .decompressor_uncompressed_addr = TARGET_NO_FIELD,
+      .section_align = GRUB_PE32_SECTION_ALIGNMENT,
+      .vaddr_offset = EFI64_HEADER_SIZE,
+      .elf_target = EM_PPC64,
+      .pe_target = GRUB_PE32_MACHINE_PPC64EFI,
+      .mod_gap = GRUB_KERNEL_POWERPC_IEEE1275_MOD_GAP,
+      .mod_align = GRUB_KERNEL_POWERPC_IEEE1275_MOD_ALIGN,
+    },
+    {
       .dirname = "mips-arc",
       .names = {"mips-arc", NULL},
       .voidp_sizeof = 4,
@@ -1342,6 +1360,7 @@ grub_install_generate_image (const char *dir, const char *prefix,
 						| GRUB_PE32_SCN_MEM_EXECUTE
 						| GRUB_PE32_SCN_MEM_READ);
 
+        fprintf(stderr, "%s: text dataoff %x datasize %x\n", __func__, text_section->raw_data_offset, text_section->raw_data_size);
 	data_section = text_section + 1;
 	strcpy (data_section->name, ".data");
 	data_section->virtual_size = grub_cpu_to_le32 (layout.kernel_size - layout.exec_size);
@@ -1352,6 +1371,9 @@ grub_install_generate_image (const char *dir, const char *prefix,
 	  = grub_cpu_to_le32_compile_time (GRUB_PE32_SCN_CNT_INITIALIZED_DATA
 			      | GRUB_PE32_SCN_MEM_READ
 			      | GRUB_PE32_SCN_MEM_WRITE);
+
+        fprintf(stderr, "%s: kernel-size %lx layout exec size %lx\n", __func__, layout.kernel_size, layout.exec_size);
+        fprintf(stderr, "%s: data dataoff %x datasize %x\n", __func__, data_section->raw_data_offset, data_section->raw_data_size);
 
 #if 0
 	bss_section = data_section + 1;
@@ -1379,6 +1401,8 @@ grub_install_generate_image (const char *dir, const char *prefix,
 			      | GRUB_PE32_SCN_MEM_READ
 			      | GRUB_PE32_SCN_MEM_WRITE);
 
+        fprintf(stderr, "%s: mods dataoff %x datasize %x\n", __func__, mods_section->raw_data_offset, mods_section->raw_data_size);
+
 	reloc_section = mods_section + 1;
 	strcpy (reloc_section->name, ".reloc");
 	reloc_section->virtual_size = grub_cpu_to_le32 (layout.reloc_size);
@@ -1389,6 +1413,7 @@ grub_install_generate_image (const char *dir, const char *prefix,
 	  = grub_cpu_to_le32_compile_time (GRUB_PE32_SCN_CNT_INITIALIZED_DATA
 			      | GRUB_PE32_SCN_MEM_DISCARDABLE
 			      | GRUB_PE32_SCN_MEM_READ);
+        fprintf(stderr, "%s: reloc dataoff %x datasize %x\n", __func__, reloc_section->raw_data_offset, reloc_section->raw_data_size);
 	free (core_img);
 	core_img = pe_img;
 	core_size = pe_size;

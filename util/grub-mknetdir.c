@@ -103,6 +103,7 @@ static const struct
     [GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275] = { "sparc64-ieee1275-aout", "ofnet", ".img" },
     [GRUB_INSTALL_PLATFORM_I386_IEEE1275] = { "i386-ieee1275", "ofnet", ".elf" },
     [GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275] = { "powerpc-ieee1275", "ofnet", ".elf" },
+    [GRUB_INSTALL_PLATFORM_POWERPC_EFI] = { "powerpc-efi", "efinet", ".efi" },
     [GRUB_INSTALL_PLATFORM_I386_EFI] = { "i386-efi", "efinet", ".efi" },
     [GRUB_INSTALL_PLATFORM_X86_64_EFI] = { "x86_64-efi", "efinet", ".efi" },
     [GRUB_INSTALL_PLATFORM_IA64_EFI] = { "ia64-efi", "efinet", ".efi" },

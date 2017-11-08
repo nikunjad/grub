@@ -22,6 +22,20 @@ struct grub_module_verifier_arch archs[] = {
       -1
     }
   },
+#if defined ( __powerpc64le__ )
+  { "powerpc", 8, 0, EM_PPC64, GRUB_MODULE_VERIFY_SUPPORTS_RELA, (int[]){
+      GRUB_ELF_R_PPC64_REL24,
+      GRUB_ELF_R_PPC64_REL32,
+      GRUB_ELF_R_PPC64_ADDR64,
+      GRUB_ELF_R_PPC64_REL16_LO,
+      GRUB_ELF_R_PPC64_REL16_HA,
+      GRUB_ELF_R_PPC64_TOC16_LO,
+      GRUB_ELF_R_PPC64_TOC16_HA,
+      GRUB_ELF_R_PPC64_TOC16_DS,
+      GRUB_ELF_R_PPC64_TOC16_LO_DS,
+      -1
+    } },
+#else
   { "powerpc", 4, 1, EM_PPC, GRUB_MODULE_VERIFY_SUPPORTS_RELA, (int[]){
       GRUB_ELF_R_PPC_ADDR16_LO,
       GRUB_ELF_R_PPC_REL24, /* It has limited range but GRUB adds trampolines when necessarry.  */
@@ -30,6 +44,7 @@ struct grub_module_verifier_arch archs[] = {
       GRUB_ELF_R_PPC_REL32,
       -1
     } },
+#endif
   { "sparc64", 8, 1, EM_SPARCV9, GRUB_MODULE_VERIFY_SUPPORTS_RELA, (int[]){
       R_SPARC_WDISP30, /* It has limited range but GRUB adds trampolines when necessarry. */
       R_SPARC_HH22,
@@ -173,3 +188,4 @@ main (int argc, char **argv)
     grub_module_verify32(module_img, module_size, &archs[arch], whitelist_empty);
   return 0;
 }
+

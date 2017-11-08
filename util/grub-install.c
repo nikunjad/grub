@@ -309,7 +309,7 @@ static const char *
 get_default_platform (void)
 {
 #ifdef __powerpc__
-   return "powerpc-ieee1275";
+   return "powerpc-efi";
 #elif defined (__sparc__) || defined (__sparc64__)
    return "sparc64-ieee1275";
 #elif defined (__MIPSEL__)
@@ -480,6 +480,7 @@ have_bootdev (enum grub_install_plat pl)
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275:
     case GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
     case GRUB_INSTALL_PLATFORM_MIPSEL_ARC:
     case GRUB_INSTALL_PLATFORM_MIPS_ARC:
       return 1;
@@ -903,6 +904,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275:
     case GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
     case GRUB_INSTALL_PLATFORM_MIPSEL_ARC:
     case GRUB_INSTALL_PLATFORM_MIPS_ARC:
     case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
@@ -943,6 +945,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_X86_64_EFI:
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
@@ -996,6 +999,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
       is_efi = 1;
       break;
     default:
@@ -1072,8 +1076,10 @@ main (int argc, char *argv[])
 	  || grub_strcmp (fs->name, "hfsplus") == 0)
 	efidir_is_mac = 1;
 
+#if 0
       if (!efidir_is_mac && grub_strcmp (fs->name, "fat") != 0)
 	grub_util_error (_("%s doesn't look like an EFI partition"), efidir);
+#endif
 
       /* The EFI specification requires that an EFI System Partition must
 	 contain an "EFI" subdirectory, and that OS loaders are stored in
@@ -1108,6 +1114,9 @@ main (int argc, char *argv[])
 	    case GRUB_INSTALL_PLATFORM_ARM64_EFI:
 	      efi_file = "BOOTAA64.EFI";
 	      break;
+	    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
+	      efi_file = "BOOTPPC.EFI";
+	      break;
 	    default:
 	      grub_util_error ("%s", _("You've found a bug"));
 	      break;
@@ -1134,6 +1143,9 @@ main (int argc, char *argv[])
 	      break;
 	    case GRUB_INSTALL_PLATFORM_ARM64_EFI:
 	      efi_file = "grubaa64.efi";
+	      break;
+	    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
+	      efi_file = "grubppc.efi";
 	      break;
 	    default:
 	      efi_file = "grub.efi";
@@ -1438,6 +1450,7 @@ main (int argc, char *argv[])
 		  case GRUB_INSTALL_PLATFORM_ARM_EFI:
 		  case GRUB_INSTALL_PLATFORM_ARM64_EFI:
 		  case GRUB_INSTALL_PLATFORM_IA64_EFI:
+		  case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
 		    g = grub_util_guess_efi_drive (*curdev);
 		    break;
 		  case GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275:
@@ -1529,6 +1542,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
       core_name = "core.efi";
       snprintf (mkimage_target, sizeof (mkimage_target),
 		"%s-%s",
@@ -1631,6 +1645,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
     case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
@@ -1861,6 +1876,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
+    case GRUB_INSTALL_PLATFORM_POWERPC_EFI:
       {
 	char *dst = grub_util_path_concat (2, efidir, efi_file);
 	grub_install_copy_file (imgfile, dst, 1);
