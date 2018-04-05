@@ -1700,7 +1700,7 @@ module = {
   i386_pc = lib/i386/pc/vesa_modes_table.c;
   mips = loader/mips/linux.c;
   powerpc_ieee1275 = loader/powerpc/ieee1275/linux.c;
-  powerpc_efi = loader/powerpc/ieee1275/linux.c;
+  powerpc_efi = loader/powerpc/efi/linux.c;
   sparc64_ieee1275 = loader/sparc64/ieee1275/linux.c;
   ia64_efi = loader/ia64/efi/linux.c;
   arm = loader/arm/linux.c;
@@ -1713,8 +1713,10 @@ module = {
 module = {
   name = fdt;
   arm64 = loader/efi/fdt.c;
+  powerpc_efi = loader/efi/fdt.c;
   common = lib/fdt.c;
   enable = fdt;
+  enable = powerpc_efi;
 };
 
 module = {
