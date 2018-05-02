@@ -29,6 +29,7 @@
 #include <grub/command.h>
 #include <grub/reader.h>
 #include <grub/parser.h>
+#include <grub/efi/efi.h>
 
 #ifdef GRUB_MACHINE_PCBIOS
 #include <grub/machine/memory.h>
@@ -309,4 +310,13 @@ grub_main (void)
 
   grub_load_normal_mode ();
   grub_rescue_run ();
+}
+
+
+void __attribute__ ((noreturn))
+grub_main_efi (void *image_handle, void *system_table)
+{
+  grub_efi_image_handle = image_handle;
+  grub_efi_system_table = system_table;
+  grub_main();
 }
