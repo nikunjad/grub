@@ -75,7 +75,7 @@ grub_TRANSFORM([grub-file])
 if test "x$TARGET_CFLAGS" = x; then
   if test "x$target_cpu" = xpowerpc64le; then
      #HACK till savegpr/addgpr is supported
-     TARGET_CFLAGS="$TARGET_CFLAGS -O1 -mno-altivec -mno-vsx"
+     TARGET_CFLAGS="$TARGET_CFLAGS -O1 -mno-altivec -mno-vsx -mminimal-toc "
   else
      TARGET_CFLAGS="$TARGET_CFLAGS -Os"
   fi
@@ -143,6 +143,8 @@ case "$target_cpu"-"$platform" in
   x86_64-xen) ;;
   x86_64-none) ;;
   x86_64-*) target_cpu=i386 ;;
+  powerpc64-efi) target_cpu=powerpc ;;
+  powerpc64le-efi) target_cpu=powerpc; do_bits=64 ;;
   powerpc64-ieee1275) target_cpu=powerpc ;;
   powerpc64le-ieee1275) target_cpu=powerpc; do_bits=64 ;;
 esac
@@ -160,6 +162,7 @@ case "$target_cpu"-"$platform" in
   i386-ieee1275) ;;
   i386-qemu) ;;
   powerpc-ieee1275) ;;
+  powerpc-efi) ;;
   sparc64-ieee1275) ;;
   ia64-efi) ;;
   mips-qemu_mips) ;;
@@ -595,7 +598,7 @@ AC_COMPILE_IFELSE(
 ]])],
 [grub_cv_cc_target_clang=no], [grub_cv_cc_target_clang=yes])])
 
-if test x$target_cpu = xpowerpc -o x$target_cpu = xmips; then
+if test x$target_cpu = xmips; then
   AC_CACHE_CHECK([for options to get big-endian compilation], grub_cv_target_cc_big_endian, [
     grub_cv_target_cc_big_endian=no
     for cand in "-target $target_cpu -Wl,-EB" "-target $target_cpu" \
@@ -1925,6 +1928,7 @@ AM_CONDITIONAL([COND_mips_arc], [test "(" x$target_cpu = xmips -o x$target_cpu =
 AM_CONDITIONAL([COND_sparc64_ieee1275], [test x$target_cpu = xsparc64 -a x$platform = xieee1275])
 AM_CONDITIONAL([COND_sparc64_emu], [test x$target_cpu = xsparc64 -a x$platform = xemu])
 AM_CONDITIONAL([COND_powerpc_ieee1275], [test x$target_cpu = xpowerpc -a x$platform = xieee1275])
+AM_CONDITIONAL([COND_powerpc_efi], [test x$target_cpu = xpowerpc -a x$platform = xefi])
 AM_CONDITIONAL([COND_mips], [test x$target_cpu = xmips -o x$target_cpu = xmipsel])
 AM_CONDITIONAL([COND_mipsel], [test x$target_cpu = xmipsel])
 AM_CONDITIONAL([COND_mipseb], [test x$target_cpu = xmips])

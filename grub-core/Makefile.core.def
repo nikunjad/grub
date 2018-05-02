@@ -48,6 +48,7 @@ kernel = {
   name = kernel;
 
   nostrip = emu;
+  nostrip = powerpc_efi;
 
   emu_ldflags              = '-Wl,-r,-d';
   i386_efi_ldflags         = '-Wl,-r,-d';
@@ -64,6 +65,9 @@ kernel = {
 
   arm64_efi_ldflags          = '-Wl,-r,-d';
   arm64_efi_stripflags       = '--strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version -R .eh_frame';
+
+  powerpc_efi_ldflags        = '-Wl,-r,-d';
+  powerpc_efi_stripflags     = '--strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version -R .eh_frame';
 
   i386_pc_ldflags          = '$(TARGET_IMG_LDFLAGS)';
   i386_pc_ldflags          = '$(TARGET_IMG_BASE_LDOPT),0x9000';
@@ -107,6 +111,7 @@ kernel = {
   mips_startup = kern/mips/startup.S;
   sparc64_ieee1275_startup = kern/sparc64/ieee1275/crt0.S;
   powerpc_ieee1275_startup = kern/powerpc/ieee1275/startup.S;
+  powerpc_efi_startup = kern/powerpc/efi/startup.S;
   arm_uboot_startup = kern/arm/startup.S;
   arm_coreboot_startup = kern/arm/startup.S;
   arm_efi_startup = kern/arm/efi/startup.S;
@@ -235,6 +240,9 @@ kernel = {
   arm64_efi = kern/arm64/efi/init.c;
   arm64_efi = kern/efi/fdt.c;
 
+  powerpc_efi = kern/powerpc/efi/init.c;
+  powerpc_efi = kern/efi/fdt.c;
+
   i386_pc = kern/i386/pc/init.c;
   i386_pc = kern/i386/pc/mmap.c;
   i386_pc = term/i386/pc/console.c;
@@ -289,6 +297,10 @@ kernel = {
   powerpc_ieee1275 = kern/powerpc/dl.c;
   powerpc_ieee1275 = kern/powerpc/compiler-rt.S;
   powerpc_ieee1275 = kern/powerpc/ieee1275/entry.S;
+
+  powerpc_efi = kern/powerpc/cache.S;
+  powerpc_efi = kern/powerpc/dl.c;
+  powerpc_efi = kern/powerpc/compiler-rt.S;
 
   sparc64_ieee1275 = kern/sparc64/cache.S;
   sparc64_ieee1275 = kern/sparc64/dl.c;
@@ -776,6 +788,7 @@ module = {
   enable = emu;
   enable = sparc64_ieee1275;
   enable = powerpc_ieee1275;
+  enable = powerpc_efi;
   enable = mips_arc;
   enable = ia64_efi;
   enable = arm_efi;
@@ -1687,6 +1700,7 @@ module = {
   i386_pc = lib/i386/pc/vesa_modes_table.c;
   mips = loader/mips/linux.c;
   powerpc_ieee1275 = loader/powerpc/ieee1275/linux.c;
+  powerpc_efi = loader/powerpc/ieee1275/linux.c;
   sparc64_ieee1275 = loader/sparc64/ieee1275/linux.c;
   ia64_efi = loader/ia64/efi/linux.c;
   arm = loader/arm/linux.c;
@@ -2344,6 +2358,16 @@ module = {
 module = {
   name = all_video;
   common = lib/fake_module.c;
+  enable = x86;
+  enable = emu;
+  enable = sparc64_ieee1275;
+  enable = powerpc_ieee1275;
+  enable = mips_arc;
+  enable = ia64_efi;
+  enable = arm_efi;
+  enable = arm64_efi;
+  enable = arm_uboot;
+  enable = arm_coreboot;
 };
 
 module = {

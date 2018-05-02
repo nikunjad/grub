@@ -32,7 +32,7 @@ GRUB_PLATFORMS = [ "emu", "i386_pc", "i386_efi", "i386_qemu", "i386_coreboot",
                    "mips_loongson", "sparc64_ieee1275",
                    "powerpc_ieee1275", "mips_arc", "ia64_efi",
                    "mips_qemu_mips", "arm_uboot", "arm_efi", "arm64_efi",
-                   "arm_coreboot"]
+                   "arm_coreboot", "powerpc_efi" ]
 
 GROUPS = {}
 
@@ -44,12 +44,12 @@ GROUPS["x86_64"]   = [ "x86_64_efi" ]
 GROUPS["x86"]      = GROUPS["i386"] + GROUPS["x86_64"]
 GROUPS["mips"]     = [ "mips_loongson", "mips_qemu_mips", "mips_arc" ]
 GROUPS["sparc64"]  = [ "sparc64_ieee1275" ]
-GROUPS["powerpc"]  = [ "powerpc_ieee1275" ]
+GROUPS["powerpc"]  = [ "powerpc_ieee1275", "powerpc_efi" ]
 GROUPS["arm"]      = [ "arm_uboot", "arm_efi", "arm_coreboot" ]
 GROUPS["arm64"]    = [ "arm64_efi" ]
 
 # Groups based on firmware
-GROUPS["efi"]  = [ "i386_efi", "x86_64_efi", "ia64_efi", "arm_efi", "arm64_efi" ]
+GROUPS["efi"]  = [ "i386_efi", "x86_64_efi", "ia64_efi", "arm_efi", "arm64_efi", "powerpc_efi" ]
 GROUPS["ieee1275"]   = [ "i386_ieee1275", "sparc64_ieee1275", "powerpc_ieee1275" ]
 GROUPS["uboot"] = [ "arm_uboot" ]
 GROUPS["xen"]  = [ "i386_xen", "x86_64_xen" ]
@@ -60,7 +60,7 @@ GROUPS["noemu"]   = GRUB_PLATFORMS[:]; GROUPS["noemu"].remove("emu")
 
 # Groups based on hardware features
 GROUPS["cmos"] = GROUPS["x86"][:] + ["mips_loongson", "mips_qemu_mips",
-                                     "sparc64_ieee1275", "powerpc_ieee1275"]
+                                     "sparc64_ieee1275", "powerpc_ieee1275", "powerpc_efi" ]
 GROUPS["cmos"].remove("i386_efi"); GROUPS["cmos"].remove("x86_64_efi");
 GROUPS["pci"]      = GROUPS["x86"] + ["mips_loongson"]
 GROUPS["usb"]      = GROUPS["pci"] + ["arm_coreboot"]
@@ -76,7 +76,7 @@ GROUPS["terminfomodule"]   = GRUB_PLATFORMS[:];
 for i in GROUPS["terminfoinkernel"]: GROUPS["terminfomodule"].remove(i)
 
 # Flattened Device Trees (FDT)
-GROUPS["fdt"] = [ "arm64_efi", "arm_uboot", "arm_efi" ]
+GROUPS["fdt"] = [ "arm64_efi", "arm_uboot", "arm_efi", "powerpc_efi" ]
 
 # Needs software helpers for division
 # Must match GRUB_DIVISION_IN_SOFTWARE in misc.h
