@@ -317,12 +317,12 @@ dev_iterate (const struct grub_ieee1275_devalias *alias)
         }
 
       INIT_IEEE1275_COMMON (&args.common, "call-method", 4, 2);
-      args.method = (grub_ieee1275_cell_t) "get-sas-children";
-      args.ihandle = ihandle;
-      args.max = table_size;
-      args.table = (grub_ieee1275_cell_t) table;
-      args.catch_result = 0;
-      args.nentries = 0;
+      args.method = IEEE1275_ADDR("get-sas-children");
+      args.ihandle = IEEE1275_VALUE(ihandle);
+      args.max = IEEE1275_VALUE(table_size);
+      args.table = IEEE1275_ADDR(table);
+      args.catch_result = IEEE1275_VALUE(0);
+      args.nentries = IEEE1275_VALUE(0);
 
       if (IEEE1275_CALL_ENTRY_FN (&args) == -1)
         {
@@ -332,7 +332,7 @@ dev_iterate (const struct grub_ieee1275_devalias *alias)
           return;
         }
 
-      for (i = 0; i < args.nentries; i++)
+      for (i = 0; i < IEEE1275_VALUE(args.nentries); i++)
         {
           grub_snprintf (bufptr, sizeof ("/disk@7766554433221100"),
                         "/disk@%" PRIxGRUB_UINT64_T, table[i]);
