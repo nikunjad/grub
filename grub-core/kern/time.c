@@ -27,7 +27,9 @@ static get_time_ms_func_t get_time_ms_func;
 grub_uint64_t
 grub_get_time_ms (void)
 {
-  return get_time_ms_func ();
+  static grub_uint64_t count = 0;
+  return ++count;
+  //  return get_time_ms_func ();
 }
 
 void
