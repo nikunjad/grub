@@ -60,6 +60,8 @@ static const struct grub_arg_option options[] = {
    N_("Check if FILE is SPARC64 Linux"), 0, 0},
   {"is-powerpc-linux", 0, 0,
    N_("Check if FILE is POWERPC Linux"), 0, 0},
+  {"is-powerpc-efi", 0, 0,
+   N_("Check if FILE is PowerPC EFI file"), 0, 0},
   {"is-x86-linux", 0, 0,
    N_("Check if FILE is x86 Linux"), 0, 0},
   {"is-x86-linux32", 0, 0,
@@ -133,6 +135,7 @@ enum
   IS_XNU32,
   IS_XNU_HIBR,
   IS_BIOS_BOOTSECTOR,
+  IS_PPC64_EFI,
   OPT_TYPE_MIN = IS_PAE_DOMU,
   OPT_TYPE_MAX = IS_BIOS_BOOTSECTOR
 };
@@ -570,6 +573,7 @@ grub_cmd_file (grub_extcmd_context_t ctxt, int argc, char **args)
     case IS_IA_EFI:
     case IS_ARM64_EFI:
     case IS_ARM_EFI:
+    case IS_PPC64_EFI:
       {
 	char signature[4];
 	grub_uint32_t pe_offset;
@@ -607,6 +611,10 @@ grub_cmd_file (grub_extcmd_context_t ctxt, int argc, char **args)
 	    && coff_head.machine !=
 	    grub_cpu_to_le16_compile_time (GRUB_PE32_MACHINE_IA64))
 	  break;
+        if (type == IS_PPC64_EFI
+            && coff_head.machine !=
+            grub_cpu_to_le16_compile_time (GRUB_PE32_MACHINE_PPC64EFI))
+          break;
 	if (type == IS_ARM64_EFI
 	    && coff_head.machine !=
 	    grub_cpu_to_le16_compile_time (GRUB_PE32_MACHINE_ARM64))
@@ -615,7 +623,7 @@ grub_cmd_file (grub_extcmd_context_t ctxt, int argc, char **args)
 	    && coff_head.machine !=
 	    grub_cpu_to_le16_compile_time (GRUB_PE32_MACHINE_ARMTHUMB_MIXED))
 	  break;
-	if (type == IS_IA_EFI || type == IS_64_EFI || type == IS_ARM64_EFI)
+	if (type == IS_IA_EFI || type == IS_64_EFI || type == IS_ARM64_EFI || type == IS_PPC64_EFI)
 	  {
 	    struct grub_pe64_optional_header o64;
 	    if (grub_file_read (file, &o64, sizeof (o64)) != sizeof (o64))
