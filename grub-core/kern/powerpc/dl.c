@@ -22,6 +22,7 @@
 #include <grub/misc.h>
 #include <grub/err.h>
 #include <grub/i18n.h>
+#include <grub/powerpc/reloc.h>
 
 #if defined( __powerpc64__ ) || defined( __powerpc64le__ )
 #define ELFCLASSXX ELFCLASS64
@@ -177,10 +178,6 @@ grub_arch_dl_get_tramp_got_size (const void *ehdr, grub_size_t *tramp,
 
   return GRUB_ERR_NONE;
 }
-
-#define PPC_LO(v) ((v) & 0xffff)
-#define PPC_HI(v) (((v) >> 16) & 0xffff)
-#define PPC_HA(v) PPC_HI ((v) + 0x8000)
 
 /* Relocate symbols.  */
 grub_err_t
