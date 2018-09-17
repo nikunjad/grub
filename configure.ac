@@ -75,14 +75,14 @@ grub_TRANSFORM([grub-file])
 if test "x$TARGET_CFLAGS" = x; then
   if test "x$target_cpu" = xpowerpc64le; then
      #HACK till savegpr/addgpr is supported
-     TARGET_CFLAGS="$TARGET_CFLAGS -O1 -mno-altivec -mno-vsx -mminimal-toc "
+     TARGET_CFLAGS="$TARGET_CFLAGS -O1 -mno-altivec -mno-vsx -mminimal-toc"
   else
      TARGET_CFLAGS="$TARGET_CFLAGS -Os"
   fi
 fi
 
 # Default HOST_CPPFLAGS
-HOST_CPPFLAGS="$HOST_CPPFLAGS -Wall -W"
+HOST_CPPFLAGS="$HOST_CPPFLAGS -Wall -W -g"
 HOST_CPPFLAGS="$HOST_CPPFLAGS -DGRUB_UTIL=1"
 
 TARGET_CPPFLAGS="$TARGET_CPPFLAGS -Wall -W"
@@ -558,7 +558,7 @@ LDFLAGS="$TARGET_LDFLAGS"
 LIBS=""
 
 # debug flags.
-TARGET_CFLAGS="$TARGET_CFLAGS $WARN_FLAGS -g -Wredundant-decls -Wmissing-prototypes -Wmissing-declarations"
+TARGET_CFLAGS="$TARGET_CFLAGS $WARN_FLAGS -Wredundant-decls -Wmissing-prototypes -Wmissing-declarations"
 TARGET_CCASFLAGS="$TARGET_CCASFLAGS -g"
 
 if test "x$target_cpu" != xi386 && test "x$target_cpu" != xx86_64; then
